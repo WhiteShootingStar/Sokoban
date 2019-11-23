@@ -36,6 +36,9 @@ public class MainPlayer : MonoBehaviour
             newCell = GameManager.mapData[x, y - 1];
             PotentialBoxCell = GameManager.mapData[x, y - 2];
             isMoving = true;
+
+           
+           
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
@@ -57,6 +60,7 @@ public class MainPlayer : MonoBehaviour
         }
         if (isMoving)
             MoveToCell(newCell, PotentialBoxCell);
+        
     }
 
     bool canMove(Cell toCheck, Cell PotentialNewBoxPlace)
