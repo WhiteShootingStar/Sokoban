@@ -71,6 +71,9 @@
     <Compile Include="Assets\Scripts\PAC-MAN Scripts\GameManagerPackMan.cs" />
     <Compile Include="Assets\Scripts\PAC-MAN Scripts\Ghosts\AbstractGhost.cs" />
     <Compile Include="Assets\Scripts\PAC-MAN Scripts\Ghosts\Blinky.cs" />
+    <Compile Include="Assets\Scripts\PAC-MAN Scripts\Ghosts\Clyde.cs" />
+    <Compile Include="Assets\Scripts\PAC-MAN Scripts\Ghosts\Inky.cs" />
+    <Compile Include="Assets\Scripts\PAC-MAN Scripts\Ghosts\Pinky.cs" />
     <Compile Include="Assets\Scripts\PAC-MAN Scripts\PackManPlayer.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/unity/project/Adrian1/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

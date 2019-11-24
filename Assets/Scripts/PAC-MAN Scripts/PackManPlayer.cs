@@ -9,7 +9,7 @@ public class PackManPlayer : MonoBehaviour
     public Cell[,] mapData = GameManagerPackMan.mapData;
 
     public Vector3 destination = Vector3.zero;
-    public Vector3 currentDirection = Vector3.zero;
+    public Vector3 currentDirection = Vector3.zero; // either Vector3 up,down,left,right
     public Vector3 nextDirection = Vector3.zero;
 
     public Text PlayerMovementText;
@@ -29,6 +29,7 @@ public class PackManPlayer : MonoBehaviour
         Move();
         PlayerMovementText.text = movementScore + " moves";
         PlayerPushText.text = pushScore + " pushes";
+        Debug.Log(currentDirection);
     }
     void Move()
     {

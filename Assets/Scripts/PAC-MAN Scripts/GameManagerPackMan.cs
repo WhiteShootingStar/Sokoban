@@ -21,8 +21,11 @@ public class GameManagerPackMan : MonoBehaviour
     public Text PlayerPushText;
     public Text WinText;
 
-
+    [Header("Ghosts")]
     public Blinky blinky;
+    public Pinky pinky;
+    public Inky inky;
+    public Clyde clyde;
     // Start is called before the first frame update
     void Start()
     {
@@ -100,13 +103,34 @@ public class GameManagerPackMan : MonoBehaviour
                     Blinky.currentCell = mapData[y, x];
                     break;
                 }
-            case 'q':
+            case 'p':
                 {
-                    cellToInstantiate = Instantiate(Exit, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
-                    instantiatedType = CellType.TargetSpot;
+                    cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    instantiatedType = CellType.Floor;
+                    var Pinky = Instantiate(pinky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+                    Pinky.currentCell = mapData[y, x];
                     break;
                 }
-            case 'p':
+            case 'i':
+                {
+                    cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    instantiatedType = CellType.Floor;
+                    var Inky = Instantiate(inky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+                    Inky.currentCell = mapData[y, x];
+                    break;
+                }
+            case 'c':
+                {
+                    cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    instantiatedType = CellType.Floor;
+                    var Clyde = Instantiate(clyde, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+                    Clyde.currentCell = mapData[y, x];
+                    break;
+                }
+            case 'P':
                 {
                     cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity, SuperParentContainer.transform);
                     var playerGameobject = Instantiate(Player, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);

@@ -580,6 +580,9 @@ MonoBehaviour:
   PlayerPushText: {fileID: 1978385004}
   WinText: {fileID: 951831620}
   blinky: {fileID: 4652395292868018726, guid: 702562e94832e7c44ad58fa16a1c22ac, type: 3}
+  pinky: {fileID: 5610332272248341306, guid: 0f9777a37aadc9c47a888dac8a6dc1d6, type: 3}
+  inky: {fileID: 4675380047800492124, guid: 6de3138905da38a4f9196583a1e9c29f, type: 3}
+  clyde: {fileID: 918187020309656898, guid: 9557b48a2ac596d4bb3a5f0093bc45d7, type: 3}
 --- !u!1 &1965232470
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,7 +765,7 @@ Light:
   serializedVersion: 9
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 2
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
