@@ -6,26 +6,39 @@ public class Blinky : AbstractGhost
 {
 
     private Cell destinationCell;
+   
 
     public override Cell GetDestination()
     {
-        return ConvertToCell(Player.transform.position);
+        return ConvertToCell(Vector3Int.FloorToInt( Player.transform.position));
     }
 
     public override void Move()
     {
-      
-        if (Vector3.Distance(transform.position, Player.transform.position) >.5f)
+        if (state == GhostState.Chase)
         {
-            destinationCell = GetDestination();
-            GetOptimalPathOutOfGivenFour(destinationCell);
-            transform.position = Vector3.MoveTowards(transform.position, resultPosition, 0.05f);
+            if (Vector3.Distance(transform.position, Player.transform.position) > .5f)
+            {
+                destinationCell = GetDestination();
+                GetOptimalPathOutOfGivenFour(destinationCell);
+               
+            }
+            else Debug.Log("Killed the Player");
         }
-        else Debug.Log("Killed the Player");
+        else if (state == GhostState.Frightened)
+        {
+            if (Vector3.Distance(transform.position, resultPosition) < .1f)
+            {
+                GetOptimalPathOutOfGivenFourScared();
+            }
+           
+        }
+        transform.position = Vector3.MoveTowards(transform.position, resultPosition, 0.05f);
     }
 
     private void Start()
     {
+        state = GhostState.Disabled;
         directionFrom = DirectionsFromWhichTheGhostCame.noDirection;
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PackManPlayer>();
         GetOptimalPathOutOfGivenFour(GetDestination());
@@ -41,10 +54,10 @@ public class Blinky : AbstractGhost
 
 
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(destinationCell.yCoordinate, 0, destinationCell.xCoordinate), 1f);
+        Gizmos.DrawWireSphere(new Vector3(destinationCell.YCoordinate, 0, destinationCell.XCoordinate), 1f);
     }
 }
 

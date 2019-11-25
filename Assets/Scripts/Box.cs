@@ -19,7 +19,7 @@ public class Box : MonoBehaviour
             for (int j = 0; j < mapData.GetLength(0) - 1; j++)
             {
 
-                if (mapData[j, i].type == CellType.TargetSpot)
+                if (mapData[j, i].Type == CellType.TargetSpot)
                     finishCells.Add(mapData[j, i]);
             }
         }
@@ -34,7 +34,7 @@ public class Box : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var inFinishPlace = finishCells.Exists(cell => cell.yCoordinate == transform.position.x && cell.xCoordinate == transform.position.z);
+        var inFinishPlace = finishCells.Exists(cell => cell.YCoordinate == transform.position.x && cell.XCoordinate == transform.position.z);
         if (inFinishPlace && !isInsidePlacementPoint)
         {
             Manager.Score++;

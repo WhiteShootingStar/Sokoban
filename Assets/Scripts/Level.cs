@@ -27,7 +27,7 @@ public static class Level
 
 
 public static string PackManString1 =
-// 23x25; w-wall, dot-flor, P-player, g-ghost, b-blinky,p-pinky, i-inky,c -clyde
+// 23x25; w-wall, dot-flor, P-player, g-gate, b-blinky,p-pinky, i-inky,c -clyde
 @"
 wwwwwwwwwwwwwwwwwwwwwww
 w..........w..........w
@@ -35,12 +35,12 @@ w.www.wwww.w.wwww.www.w
 w.www.wwww.w.wwww.www.w
 w.....................w
 w.www.w.wwwwwww.w.www.w
-w..b..w.wwwwwww.w..p..w
-wwwww.w.i..w..c.w.wwwww
+w.....w.wwwwwww.w.....w
+wwwww.w....w....w.wwwww
 wwwww.wwww.w.wwww.wwwww
 wwwww.w.........w.wwwww
-wwwww.w.wwwwwww.w.wwwww
-wwwww...w.....w...wwwww
+wwwww.w.wwwgwww.w.wwwww
+wwwww...wbpwicw...wwwww
 wwwww.w.wwwwwww.w.wwwww
 wwwww.w.........w.wwwww
 wwwww.w.wwwwwww.w.wwwww

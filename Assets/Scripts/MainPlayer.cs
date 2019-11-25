@@ -27,8 +27,8 @@ public class MainPlayer : MonoBehaviour
     }
     void Move()
     {
-        var x = CellPosition.xCoordinate;
-        var y = CellPosition.yCoordinate;
+        var x = CellPosition.XCoordinate;
+        var y = CellPosition.YCoordinate;
         Cell newCell = null;
         Cell PotentialBoxCell = null;
         if (Input.GetKeyDown(KeyCode.W))
@@ -66,13 +66,13 @@ public class MainPlayer : MonoBehaviour
     bool canMove(Cell toCheck, Cell PotentialNewBoxPlace)
     {
 
-        if (toCheck.type == CellType.Wall)
+        if (toCheck.Type == CellType.Wall)
         {
             return false;
         }
-        else if (toCheck.type == CellType.Box)
+        else if (toCheck.Type == CellType.Box)
         {
-            if (PotentialNewBoxPlace.type == CellType.Wall || PotentialNewBoxPlace.type == CellType.Box)
+            if (PotentialNewBoxPlace.Type == CellType.Wall || PotentialNewBoxPlace.Type == CellType.Box)
             {
                 return false;
             }
@@ -87,14 +87,14 @@ public class MainPlayer : MonoBehaviour
         {
             if (CellHasBox(toMove))
             {  
-                PotentialNewBoxPlace.item = toMove.item;
-                PotentialNewBoxPlace.item.transform.position = new Vector3Int(PotentialNewBoxPlace.yCoordinate, 0, PotentialNewBoxPlace.xCoordinate);
-                toMove.item = null;
-                toMove.type = CellType.Floor;
-                PotentialNewBoxPlace.type = CellType.Box;
+                PotentialNewBoxPlace.Item = toMove.Item;
+                PotentialNewBoxPlace.Item.transform.position = new Vector3Int(PotentialNewBoxPlace.YCoordinate, 0, PotentialNewBoxPlace.XCoordinate);
+                toMove.Item = null;
+                toMove.Type = CellType.Floor;
+                PotentialNewBoxPlace.Type = CellType.Box;
                 pushScore++;
             }
-            transform.position = new Vector3Int(toMove.yCoordinate,0,toMove.xCoordinate);
+            transform.position = new Vector3Int(toMove.YCoordinate,0,toMove.XCoordinate);
                 CellPosition = toMove;
             movementScore++;
         }
@@ -103,7 +103,7 @@ public class MainPlayer : MonoBehaviour
 
     bool CellHasBox(Cell toCheck)
     {
-        if (toCheck.type == CellType.Box)
+        if (toCheck.Type == CellType.Box)
         {
             return true;
         }
@@ -113,7 +113,7 @@ public class MainPlayer : MonoBehaviour
 
     bool isOccupied(Cell toCheck)
     {
-        if (toCheck.type == CellType.Box|| toCheck.type==CellType.Wall)
+        if (toCheck.Type == CellType.Box|| toCheck.Type==CellType.Wall)
         {
             return true;
         }

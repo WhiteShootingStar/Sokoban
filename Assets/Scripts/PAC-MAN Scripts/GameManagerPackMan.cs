@@ -10,15 +10,15 @@ using UnityEngine.UI;
 // PLEASE BE CAREFULL
 public class GameManagerPackMan : MonoBehaviour
 {
-    public GameObject Wall, Box, Player, Exit, Floor;
-    private GameObject SuperParentContainer;
-    private PackManPlayer mainPlayer;
+    [Header("Map Obstacles")]
+    public GameObject Wall, Box, Player, Exit, Floor, Gate;
+    private GameObject SuperParentContainer, SuperCoinParentContainer;
+    public static PackManPlayer mainPlayer;
     public static Cell[,] mapData;
     public int Score = 0;
-    public int MaxScore = 1;
+
     public Text ScoreText;
-    public Text PlayerMovementText;
-    public Text PlayerPushText;
+
     public Text WinText;
 
     [Header("Ghosts")]
@@ -26,6 +26,14 @@ public class GameManagerPackMan : MonoBehaviour
     public Pinky pinky;
     public Inky inky;
     public Clyde clyde;
+    private List<AbstractGhost> ghosts = new List<AbstractGhost>();
+
+    [Header("Pick-Ups")]
+    public Coin coin;
+    public SuperCoin superCoin;
+    public static Coin[,] coins;
+
+    public float spawnTimer = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,20 +42,28 @@ public class GameManagerPackMan : MonoBehaviour
         //WinText.enabled = false;
         WinText.gameObject.SetActive(false);
         SuperParentContainer = new GameObject("Container");
+        SuperCoinParentContainer = new GameObject("Coin Container");
+
         CreateField();
-
-
+        CreateCoins();
+        ghosts.Add(inky);
+        ghosts.Add(blinky);
+        ghosts.Add(pinky);
+        ghosts.Add(clyde);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ScoreText.text = Score + " Boxes are is place out of " + MaxScore;
-        if (Score >= MaxScore)
-        {
 
-            WinText.gameObject.SetActive(true);
-        }
+
+        spawnTimer += Time.deltaTime;
+        ActivateGhost(blinky, 0f);
+        ActivateGhost(pinky, 15f);
+        ActivateGhost(inky, 30f);
+        ActivateGhost(clyde, 45f);
+        //WinText.gameObject.SetActive(true);
+
     }
 
 
@@ -70,7 +86,7 @@ public class GameManagerPackMan : MonoBehaviour
             }
         }
         // Camera.main.transform.position = new Vector3(1 * lines.Length / 2, 0, 1 * lines[0].Length / 2);
-        SetCamera(mapData[lines[1].Length/2,lines.Length/2]);
+        SetCamera(mapData[lines[1].Length / 2, lines.Length / 2]);
     }
 
 
@@ -87,6 +103,13 @@ public class GameManagerPackMan : MonoBehaviour
                     instantiatedType = CellType.Floor;
                     break;
                 }
+            case 'g':
+                {
+                    cellToInstantiate = Instantiate(Gate, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    Gate = cellToInstantiate;
+                    instantiatedType = CellType.Gate;
+                    break;
+                }
             case 'w':
                 {
                     cellToInstantiate = Instantiate(Wall, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
@@ -97,37 +120,37 @@ public class GameManagerPackMan : MonoBehaviour
                 {
                     cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
 
-                    var Blinky = Instantiate(blinky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    blinky = Instantiate(blinky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     instantiatedType = CellType.Floor;
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
-                    Blinky.currentCell = mapData[y, x];
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
+                    blinky.currentCell = mapData[y, x];
                     break;
                 }
             case 'p':
                 {
                     cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     instantiatedType = CellType.Floor;
-                    var Pinky = Instantiate(pinky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
-                    Pinky.currentCell = mapData[y, x];
+                    pinky = Instantiate(pinky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
+                    pinky.currentCell = mapData[y, x];
                     break;
                 }
             case 'i':
                 {
                     cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     instantiatedType = CellType.Floor;
-                    var Inky = Instantiate(inky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
-                    Inky.currentCell = mapData[y, x];
+                    inky = Instantiate(inky, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
+                    inky.currentCell = mapData[y, x];
                     break;
                 }
             case 'c':
                 {
                     cellToInstantiate = Instantiate(Floor, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     instantiatedType = CellType.Floor;
-                    var Clyde = Instantiate(clyde, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
-                    Clyde.currentCell = mapData[y, x];
+                    clyde = Instantiate(clyde, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
+                    clyde.currentCell = mapData[y, x];
                     break;
                 }
             case 'P':
@@ -136,9 +159,8 @@ public class GameManagerPackMan : MonoBehaviour
                     var playerGameobject = Instantiate(Player, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     mainPlayer = playerGameobject.GetComponent<PackManPlayer>();
                     instantiatedType = CellType.Floor;
-                    mainPlayer.PlayerMovementText = PlayerMovementText;
-                    mainPlayer.PlayerPushText = PlayerPushText;
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+                    mainPlayer.ScoreText = ScoreText;
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
                     mainPlayer.CellPosition = mapData[y, x];
                     Debug.Log(mainPlayer.CellPosition);
                     break;
@@ -149,17 +171,17 @@ public class GameManagerPackMan : MonoBehaviour
                     break;
                 }
         }
-        mapData[y, x] = new Cell { item = instantiatedBox, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+        mapData[y, x] = new Cell { Item = instantiatedBox, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
         cellToInstantiate.transform.SetParent(SuperParentContainer.transform);
 
     }
 
     void SetCamera(Cell middle)
     {
-        Camera.main.transform.position = new Vector3(1 * middle.xCoordinate+2,1.5f* Mathf.Sqrt(middle.xCoordinate*middle.yCoordinate), 1 * middle.yCoordinate);
+        Camera.main.transform.position = new Vector3(1 * middle.XCoordinate + 2, 1.5f * Mathf.Sqrt(middle.XCoordinate * middle.YCoordinate), 1 * middle.YCoordinate);
         Camera.main.transform.rotation = Quaternion.Euler(90f, -90f, 0f);
         //Camera.main.transform.position += Vector3.right * 5;
-        Camera.main.fieldOfView += Mathf.Sqrt(middle.xCoordinate * middle.yCoordinate);
+        Camera.main.fieldOfView += Mathf.Sqrt(middle.XCoordinate * middle.YCoordinate);
     }
 
 
@@ -168,5 +190,76 @@ public class GameManagerPackMan : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void CreateCoins()
+    {
+        int counter = 1;
+        coins = new Coin[mapData.GetLength(1), mapData.GetLength(0)];
+        for (int i = 1; i < mapData.GetLength(0) - 1; i++)
+        {
+            for (int k = 1; k < mapData.GetLength(1) - 1; k++)
+            {
+                if (mapData[i, k].Type == CellType.Floor && !IsOccupiedByGhost(mapData[i, k]))
+                {
+                    Coin createdCoin = null;
+                    if (counter % 35 != 0)
+                    {
+                        createdCoin = Instantiate(coin, new Vector3(k, 0.5f, i), Quaternion.identity, SuperCoinParentContainer.transform);
+                        counter++;
+                        Debug.Log("coin");
+                    }
+                    else if (counter % 35 == 0)
+                    {
+                        createdCoin = Instantiate(superCoin, new Vector3(k, 0.5f, i), Quaternion.identity, SuperCoinParentContainer.transform);
+                        counter = 1;
+                        Debug.Log("SuperCoin");
+                    }
+                    createdCoin.currentCell = mapData[i, k];
+                    coins[k, i] = createdCoin;
 
+                }
+            }
+        }
+
+    }
+
+    bool IsOccupiedByGhost(Cell tocheck)
+    {
+        return tocheck.Equals(clyde.currentCell) || tocheck.Equals(inky.currentCell) ||
+              tocheck.Equals(pinky.currentCell) || tocheck.Equals(blinky.currentCell);
+    }
+
+    void ActivateGhost(AbstractGhost ghost, float thresholdTimer)
+    {
+        Vector3Int spawnPosition = Vector3Int.FloorToInt(Gate.transform.position) + Vector3Int.left;
+        if (ghost.state == GhostState.Disabled && spawnTimer >= thresholdTimer)
+        {
+            ghost.transform.position = spawnPosition;
+            ghost.currentCell = ConvertToCell(spawnPosition);
+            ghost.state = GhostState.Chase;
+        }
+    }
+
+    public void ScareGhosts()
+    {
+        for (int i = 0; i < ghosts.Count; i++)
+        {
+            if (ghosts[i].state == GhostState.Chase)
+            {
+                ghosts[i].state = GhostState.Frightened;
+            }
+        }
+    }
+
+
+
+
+
+    public Cell ConvertToCell(Vector3Int vector)// Mapping of position to Cell
+    {
+        if (vector.z < 0) vector.z = 0;
+        if (vector.x < 0) vector.x = 0;
+        if (vector.x >= mapData.GetLength(1) - 1) vector.x = mapData.GetLength(1) - 2;
+        if (vector.z >= mapData.GetLength(0) - 1) vector.z = mapData.GetLength(0) - 2;
+        return mapData[vector.z, vector.x];
+    }
 }

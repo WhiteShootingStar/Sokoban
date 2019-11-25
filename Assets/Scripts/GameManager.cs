@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
                     instantiatedType = CellType.Floor;
                     mainPlayer.PlayerMovementText = PlayerMovementText;
                     mainPlayer.PlayerPushText = PlayerPushText;
-                    mapData[y, x] = new Cell { item = cellToInstantiate, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+                    mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
                     mainPlayer.CellPosition = mapData[y, x];
                     Debug.Log(mainPlayer.CellPosition);
                     break;
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
                     break;
                 }
         }
-        mapData[y, x] = new Cell { item = instantiatedBox, type = instantiatedType.Value, xCoordinate = y, yCoordinate = x };
+        mapData[y, x] = new Cell { Item = instantiatedBox, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
         cellToInstantiate.transform.SetParent(SuperParentContainer.transform);
 
     }
