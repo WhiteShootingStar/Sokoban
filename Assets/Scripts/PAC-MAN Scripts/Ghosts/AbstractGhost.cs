@@ -17,7 +17,7 @@ public abstract class AbstractGhost : MonoBehaviour
 
     public virtual void Update()
     {
-        if (hasToBlink && state == GhostState.Frightened || state==GhostState.Eyes)
+        if (hasToBlink && (state == GhostState.Frightened || state == GhostState.Eyes))
         {
             if (Mathf.FloorToInt(totalTimer % 2) == 1)
             {
@@ -65,19 +65,19 @@ public abstract class AbstractGhost : MonoBehaviour
         List<Vector3Int> directions = new List<Vector3Int>();// since Blinky has a priority , I've decided to add direction in special order to the list 
 
         //if Ghosts came from the same direction, we don't add this direction
-        if (directionFrom != DirectionsFromWhichTheGhostCame.right)
+        if (directionFrom != DirectionsFromWhichTheGhostCame.right && !IsWall(right))
         {
             directions.Add(right);
         }
-        if (directionFrom != DirectionsFromWhichTheGhostCame.down)
+        if (directionFrom != DirectionsFromWhichTheGhostCame.down  && !IsWall(down))
         {
             directions.Add(down);
         }
-        if (directionFrom != DirectionsFromWhichTheGhostCame.left)
+        if (directionFrom != DirectionsFromWhichTheGhostCame.left && !IsWall(left))
         {
             directions.Add(left);
         }
-        if (directionFrom != DirectionsFromWhichTheGhostCame.up)
+        if (directionFrom != DirectionsFromWhichTheGhostCame.up && !IsWall(up))
         {
             directions.Add(up);
         }
@@ -106,8 +106,12 @@ public abstract class AbstractGhost : MonoBehaviour
         }
 
         AssignDirection(transform.position, result.Value);
-
-        resultPosition = result.Value;
+        if (result.Value == null)
+        {
+            GetOptimalPathOutOfGivenFour(destinationCell);
+        }
+        else
+            resultPosition = result.Value;
     }
 
 
@@ -163,7 +167,7 @@ public abstract class AbstractGhost : MonoBehaviour
     }
     bool IsWall(Vector3Int vector)
     {
-        return ConvertToCell(vector).Type == CellType.Wall;
+        return ConvertToCell(vector).Type == CellType.Wall|| ConvertToCell(vector).Type == CellType.Gate;
     }
 
     public void Blink()

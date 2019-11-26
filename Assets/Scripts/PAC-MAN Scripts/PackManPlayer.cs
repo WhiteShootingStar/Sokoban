@@ -80,7 +80,7 @@ public class PackManPlayer : MonoBehaviour
             nextDirection = new Vector3Int(0, 0, 1);
 
         }
-        if (Vector3.Distance(destination, transform.position) < precision)//
+        if (Vector3.Distance(destination, transform.position) <= precision)//
         {
             CollectCoin();
             if (CanMove(ConvertToCell(transform.position + nextDirection)))

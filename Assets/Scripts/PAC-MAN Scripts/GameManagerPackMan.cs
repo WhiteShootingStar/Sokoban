@@ -67,9 +67,9 @@ public class GameManagerPackMan : MonoBehaviour
 
         spawnTimer += Time.deltaTime;
         ActivateGhost(blinky, 0f);
-        ActivateGhost(pinky, 10f);
-        ActivateGhost(inky, 15f);
-        ActivateGhost(clyde, 20f);
+        ActivateGhost(pinky, 5f);
+        ActivateGhost(inky, 10f);
+        ActivateGhost(clyde, 15f);
         if (allowUnscareTimerToDecrease) unscareTimer -= Time.deltaTime;
         if (unscareTimer <= 7f && unscareTimer > 6.5f) GhostsAreBlinking();
         if (unscareTimer <= 0f) GhostsNotScaredAnymore();

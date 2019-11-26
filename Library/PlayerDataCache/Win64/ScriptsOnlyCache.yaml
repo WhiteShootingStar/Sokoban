@@ -4,10 +4,12 @@ ScriptsOnlyBuild:
     - Blinky
     - Box
     - Clyde
+    - Coin
     - GameManagerPackMan
     - Inky
     - PackManPlayer
     - Pinky
+    - SuperCoin
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
@@ -20,8 +22,10 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/TAK-Men.unity:
@@ -58,28 +62,40 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9820}
     - Class: 114
+      Script: {instanceID: 9860}
+    - Class: 114
       Script: {instanceID: 9962}
     - Class: 114
       Script: {instanceID: 10016}
     - Class: 114
-      Script: {instanceID: 10230}
+      Script: {instanceID: 10078}
     - Class: 114
-      Script: {instanceID: 10382}
+      Script: {instanceID: 10232}
     - Class: 114
-      Script: {instanceID: 10632}
+      Script: {instanceID: 10384}
     - Class: 114
-      Script: {instanceID: 10660}
+      Script: {instanceID: 10398}
     - Class: 114
-      Script: {instanceID: 11014}
+      Script: {instanceID: 10572}
     - Class: 114
-      Script: {instanceID: 11278}
+      Script: {instanceID: 10636}
     - Class: 114
-      Script: {instanceID: 11362}
+      Script: {instanceID: 10664}
+    - Class: 114
+      Script: {instanceID: 11018}
+    - Class: 114
+      Script: {instanceID: 11282}
+    - Class: 114
+      Script: {instanceID: 11366}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
+    - Class: 135
+      Script: {instanceID: 0}
     - Class: 157
+      Script: {instanceID: 0}
+    - Class: 213
       Script: {instanceID: 0}
     - Class: 222
       Script: {instanceID: 0}
@@ -114,7 +130,7 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
-      Hash: fcca6344252ac42169be3c632c461177
+      Hash: 67328a1897e0b91bed2a210c39d1ed42
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Blinky
@@ -216,7 +232,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: fcca6344252ac42169be3c632c461177
+      Hash: 67328a1897e0b91bed2a210c39d1ed42
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Clyde
@@ -244,6 +260,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SubMeshUI
+  - hash:
+      serializedVersion: 2
+      Hash: 67e57e822cc3baa3fbf8245255817f34
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Coin
   - hash:
       serializedVersion: 2
       Hash: 5ab533713adae59372fb3e10a585c186
@@ -306,10 +328,16 @@ ScriptsOnlyBuild:
     className: TMP_Asset
   - hash:
       serializedVersion: 2
-      Hash: fcca6344252ac42169be3c632c461177
+      Hash: 67328a1897e0b91bed2a210c39d1ed42
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Inky
+  - hash:
+      serializedVersion: 2
+      Hash: 67e57e822cc3baa3fbf8245255817f34
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SuperCoin
   - hash:
       serializedVersion: 2
       Hash: d4020bafcd3ccbb5601a6e6c8ac78be0
@@ -354,7 +382,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: 34c3ce996e208b45b588b43b85adde87
+      Hash: 0ca3de70af88e6bd68be0bd2ad595a51
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManagerPackMan
@@ -366,7 +394,7 @@ ScriptsOnlyBuild:
     className: VerticalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: fcca6344252ac42169be3c632c461177
+      Hash: 67328a1897e0b91bed2a210c39d1ed42
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Pinky
@@ -480,7 +508,7 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
-      Hash: bbd9a4794264be062ffe3d88b02d9fa3
+      Hash: 709062c46eb9c77c8bef7e5982ff81e5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PackManPlayer
