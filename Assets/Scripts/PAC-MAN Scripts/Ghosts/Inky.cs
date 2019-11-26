@@ -33,11 +33,22 @@ public class Inky : AbstractGhost
         }
         else if (state == GhostState.Frightened)
         {
-            if (Vector3.Distance(transform.position, resultPosition) < .1f)
+            if (Vector3.Distance(transform.position, resultPosition)< 0.0001f)
             {
                 GetOptimalPathOutOfGivenFourScared();
             }
 
+        }
+        else if (state == GhostState.Eyes)
+        {
+            if (Vector3.Distance(transform.position, new Vector3Int(EyesCell.YCoordinate, 0, EyesCell.XCoordinate)) >= 0.3f)
+            {
+                GetOptimalPathOutOfGivenFour(EyesCell);
+            }
+            else
+            {
+                state = GhostState.Chase;
+            }
         }
         transform.position = Vector3.MoveTowards(transform.position, resultPosition, 0.05f);
     }
@@ -53,9 +64,10 @@ public class Inky : AbstractGhost
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
         Move();
+        base.Update();
     }
 
     Cell GetIntermidiatePosition()

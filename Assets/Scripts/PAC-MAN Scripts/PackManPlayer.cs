@@ -13,30 +13,51 @@ public class PackManPlayer : MonoBehaviour
     public Vector3Int currentDirection = Vector3Int.zero; // either Vector3 up,down,left,right
     public Vector3Int nextDirection = Vector3Int.zero;
 
-    
-    public Text ScoreText;
+
+    public Text ScoreText,DeadText;
+    public Button RestartButton;
     private int score = 0;
-   
+    private bool WIN=false;
 
     private readonly float precision = 0.0001f;
     // Start is called before the first frame update
     void Start()
     {
         destination = transform.position;
+        RestartButton.gameObject.SetActive(false);
+        DeadText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-        ScoreText.text = score+"";
+        if (GameManagerPackMan.state == GameState.Alive)
+        {
+            Move();
+        }
+        else
+        {
+            RestartButton.gameObject.SetActive(true);
+            DeadText.gameObject.SetActive(true);
+        }
+        if (WIN)
+        {
+            ScoreText.text = "You won" ;
+
+        }
+        else
+        {
+
+
+            ScoreText.text = score + "";
+        }
+
        
-        Debug.Log(currentDirection);
     }
     void Move()
     {
 
-        transform.position = Vector3.MoveTowards(transform.position, destination, 0.1f);
+        transform.position = Vector3.MoveTowards(transform.position, destination, 4f *Time.deltaTime);
         CellPosition = mapData[(int)destination.z, (int)destination.x];
 
         if (Input.GetKey(KeyCode.W))
@@ -103,9 +124,11 @@ public class PackManPlayer : MonoBehaviour
         if (GameManagerPackMan.coins[CellPosition.YCoordinate, CellPosition.XCoordinate] != null)
         {
             GameManagerPackMan.coins[CellPosition.YCoordinate, CellPosition.XCoordinate].PickupDot();
-            Debug.Log("Coin collected");
-            GameManagerPackMan.coins[CellPosition.YCoordinate, CellPosition.XCoordinate] = null;
+
+            // GameManagerPackMan.coins[CellPosition.YCoordinate, CellPosition.XCoordinate] = null;
+            GameManagerPackMan.coinsTotal -= 1;
             score += 10;
+            WIN=GameManagerPackMan.HasWon();
         }
     }
 

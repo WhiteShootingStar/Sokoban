@@ -16,7 +16,7 @@ public class GameManagerPackMan : MonoBehaviour
     public static PackManPlayer mainPlayer;
     public static Cell[,] mapData;
     public int Score = 0;
-
+    public static Cell EyesCell;
     public Text ScoreText;
 
     public Text WinText;
@@ -32,17 +32,25 @@ public class GameManagerPackMan : MonoBehaviour
     public Coin coin;
     public SuperCoin superCoin;
     public static Coin[,] coins;
+    public static int coinsTotal = 0;
 
-    public float spawnTimer = 0f;
+    [Header("Restart")]
+    public Button RestartButton;
+    public Text YouAreDead;
+    public static GameState state = GameState.Alive;
+    private float spawnTimer = 0f;
+    private float unscareTimer = 10f;
+    private bool allowUnscareTimerToDecrease = false;
     // Start is called before the first frame update
     void Start()
     {
 
-
+        state = GameState.Alive;
         //WinText.enabled = false;
         WinText.gameObject.SetActive(false);
         SuperParentContainer = new GameObject("Container");
         SuperCoinParentContainer = new GameObject("Coin Container");
+
 
         CreateField();
         CreateCoins();
@@ -59,9 +67,12 @@ public class GameManagerPackMan : MonoBehaviour
 
         spawnTimer += Time.deltaTime;
         ActivateGhost(blinky, 0f);
-        ActivateGhost(pinky, 15f);
-        ActivateGhost(inky, 30f);
-        ActivateGhost(clyde, 45f);
+        ActivateGhost(pinky, 10f);
+        ActivateGhost(inky, 15f);
+        ActivateGhost(clyde, 20f);
+        if (allowUnscareTimerToDecrease) unscareTimer -= Time.deltaTime;
+        if (unscareTimer <= 7f && unscareTimer > 6.5f) GhostsAreBlinking();
+        if (unscareTimer <= 0f) GhostsNotScaredAnymore();
         //WinText.gameObject.SetActive(true);
 
     }
@@ -107,6 +118,7 @@ public class GameManagerPackMan : MonoBehaviour
                 {
                     cellToInstantiate = Instantiate(Gate, new Vector3(1 * x, 0, 1 * y), Quaternion.identity);
                     Gate = cellToInstantiate;
+                    EyesCell = new Cell { XCoordinate = y, YCoordinate = x - 1 };
                     instantiatedType = CellType.Gate;
                     break;
                 }
@@ -160,6 +172,8 @@ public class GameManagerPackMan : MonoBehaviour
                     mainPlayer = playerGameobject.GetComponent<PackManPlayer>();
                     instantiatedType = CellType.Floor;
                     mainPlayer.ScoreText = ScoreText;
+                    mainPlayer.RestartButton = RestartButton;
+                    mainPlayer.DeadText = YouAreDead;
                     mapData[y, x] = new Cell { Item = cellToInstantiate, Type = instantiatedType.Value, XCoordinate = y, YCoordinate = x };
                     mainPlayer.CellPosition = mapData[y, x];
                     Debug.Log(mainPlayer.CellPosition);
@@ -215,7 +229,7 @@ public class GameManagerPackMan : MonoBehaviour
                     }
                     createdCoin.currentCell = mapData[i, k];
                     coins[k, i] = createdCoin;
-
+                    coinsTotal += 1;
                 }
             }
         }
@@ -237,6 +251,7 @@ public class GameManagerPackMan : MonoBehaviour
             ghost.currentCell = ConvertToCell(spawnPosition);
             ghost.state = GhostState.Chase;
         }
+
     }
 
     public void ScareGhosts()
@@ -248,8 +263,34 @@ public class GameManagerPackMan : MonoBehaviour
                 ghosts[i].state = GhostState.Frightened;
             }
         }
+        allowUnscareTimerToDecrease = true;
     }
+    public void GhostsNotScaredAnymore()
+    {
+        for (int i = 0; i < ghosts.Count; i++)
+        {
+            if (ghosts[i].state == GhostState.Frightened)
+            {
+                ghosts[i].state = GhostState.Chase;
 
+
+            }
+        }
+        allowUnscareTimerToDecrease = false;
+        unscareTimer = 10f;
+    }
+    public void GhostsAreBlinking()
+    {
+        for (int i = 0; i < ghosts.Count; i++)
+        {
+            if (ghosts[i].state == GhostState.Frightened)
+            {
+
+                ghosts[i].Blink();
+
+            }
+        }
+    }
 
 
 
@@ -262,4 +303,13 @@ public class GameManagerPackMan : MonoBehaviour
         if (vector.z >= mapData.GetLength(0) - 1) vector.z = mapData.GetLength(0) - 2;
         return mapData[vector.z, vector.x];
     }
+
+    public static bool HasWon()
+    {
+        return coinsTotal <= 0;
+    }
+}
+public enum GameState
+{
+    Dead, Alive
 }

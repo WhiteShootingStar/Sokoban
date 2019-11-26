@@ -17,21 +17,32 @@ public class Blinky : AbstractGhost
     {
         if (state == GhostState.Chase)
         {
-            if (Vector3.Distance(transform.position, Player.transform.position) > .5f)
+            if (Vector3.Distance(transform.position, Player.transform.position) > .5f )
             {
                 destinationCell = GetDestination();
                 GetOptimalPathOutOfGivenFour(destinationCell);
                
             }
-            else Debug.Log("Killed the Player");
+            
         }
         else if (state == GhostState.Frightened)
         {
-            if (Vector3.Distance(transform.position, resultPosition) < .1f)
+            if (Vector3.Distance(transform.position, resultPosition) < 0.0001f)
             {
                 GetOptimalPathOutOfGivenFourScared();
             }
            
+        }
+        else if (state == GhostState.Eyes)
+        {
+            if (Vector3.Distance(transform.position, new Vector3Int(EyesCell.YCoordinate,0,EyesCell.XCoordinate)) >= 0.3f)
+            {
+                GetOptimalPathOutOfGivenFour(EyesCell);
+            }
+            else
+            {
+                state = GhostState.Chase;
+            }
         }
         transform.position = Vector3.MoveTowards(transform.position, resultPosition, 0.05f);
     }
@@ -45,9 +56,10 @@ public class Blinky : AbstractGhost
     }
 
     // Update is called once per frame
-    void Update()
+   public override void  Update()
     {
         Move();
+        base.Update();
     }
 
    
@@ -56,8 +68,11 @@ public class Blinky : AbstractGhost
 
     private void OnDrawGizmos()
     {
+       
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(new Vector3(destinationCell.YCoordinate, 0, destinationCell.XCoordinate), 1f);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(new Vector3Int(EyesCell.YCoordinate, 0, EyesCell.XCoordinate), 1f);
     }
 }
 

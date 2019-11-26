@@ -6,12 +6,38 @@ public abstract class AbstractGhost : MonoBehaviour
 {
     public PackManPlayer Player;
     public Cell currentCell;
+    public Cell EyesCell = GameManagerPackMan.EyesCell;
     public Cell[,] mapData = GameManagerPackMan.mapData;
     public DirectionsFromWhichTheGhostCame directionFrom;
     public GhostState state;
     public Vector3 resultPosition;
 
-    // Start is called before the first frame update
+    public bool hasToBlink = false;
+    public float totalTimer = 7f;
+
+    public virtual void Update()
+    {
+        if (hasToBlink && state == GhostState.Frightened || state==GhostState.Eyes)
+        {
+            if (Mathf.FloorToInt(totalTimer % 2) == 1)
+            {
+                transform.GetChild(0).gameObject.SetActive(false);
+            }
+            else if (Mathf.FloorToInt(totalTimer % 2) == 0)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+            }
+            totalTimer -= Time.deltaTime;
+            if (totalTimer <= 0f)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+                hasToBlink = false;
+                totalTimer = 7f;
+            }
+        }
+
+        CatchPlayerOrBeCaught();
+    }
 
 
 
@@ -87,19 +113,19 @@ public abstract class AbstractGhost : MonoBehaviour
 
     void AssignDirection(Vector3 currentPosition, Vector3 nextPosition)
     {
-        if (nextPosition.z - currentPosition.z >= 0.5f)
+        if (nextPosition.z - currentPosition.z >= 0.1f)
         {
             directionFrom = DirectionsFromWhichTheGhostCame.left;
         }
-        else if (nextPosition.z - currentPosition.z <= -0.5f)
+        else if (nextPosition.z - currentPosition.z <= -0.1f)
         {
             directionFrom = DirectionsFromWhichTheGhostCame.right;
         }
-        else if (nextPosition.x - currentPosition.x >= 0.5f)
+        else if (nextPosition.x - currentPosition.x >= 0.1f)
         {
             directionFrom = DirectionsFromWhichTheGhostCame.up;
         }
-        else if (nextPosition.x - currentPosition.x <= -0.5f)
+        else if (nextPosition.x - currentPosition.x <= -0.1f)
         {
             directionFrom = DirectionsFromWhichTheGhostCame.down;
         }
@@ -114,7 +140,7 @@ public abstract class AbstractGhost : MonoBehaviour
         Vector3Int right = Vector3Int.FloorToInt(transform.position) + new Vector3Int(0, 0, 1);
 
         List<Vector3Int> directions = new List<Vector3Int>();// since Blinky has a priority , I've decided to add direction in special order to the list 
-        if (!IsWall(up)&& directionFrom != DirectionsFromWhichTheGhostCame.up)
+        if (!IsWall(up) && directionFrom != DirectionsFromWhichTheGhostCame.up)
         {
             directions.Add(up);
         }
@@ -126,7 +152,7 @@ public abstract class AbstractGhost : MonoBehaviour
         {
             directions.Add(left);
         }
-        if (!IsWall(right)&& directionFrom != DirectionsFromWhichTheGhostCame.right)
+        if (!IsWall(right) && directionFrom != DirectionsFromWhichTheGhostCame.right)
         {
             directions.Add(right);
         }
@@ -139,6 +165,30 @@ public abstract class AbstractGhost : MonoBehaviour
     {
         return ConvertToCell(vector).Type == CellType.Wall;
     }
+
+    public void Blink()
+    {
+
+        hasToBlink = true;
+    }
+
+    void CatchPlayerOrBeCaught()
+    {
+        if (Vector3.Distance(transform.position, Player.transform.position) <= 0.3f)
+        {
+            if (state == GhostState.Chase)
+            {
+                GameManagerPackMan.state = GameState.Dead;
+            }
+
+            else if (state == GhostState.Frightened)
+            {
+                state = GhostState.Eyes;
+                Debug.Log("Frightened");
+            }
+        }
+
+    }
 }
 
 public enum DirectionsFromWhichTheGhostCame
@@ -149,5 +199,6 @@ public enum GhostState
 {
     Chase,
     Frightened,
-    Disabled
+    Disabled,
+    Eyes
 }
